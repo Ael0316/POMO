@@ -1,0 +1,102 @@
+{
+  "env_params": {
+    "problem_size": 100,
+    "pomo_size": 100
+  },
+  "model_params": {
+    "embedding_dim": 128,
+    "sqrt_embedding_dim": 11.313708498984761,
+    "encoder_layer_num": 6,
+    "decoder_layer_num": 1,
+    "decoder_variant": "pomo_light",
+    "qkv_dim": 16,
+    "head_num": 8,
+    "logit_clipping": 50,
+    "ff_hidden_dim": 512,
+    "eval_type": "argmax"
+  },
+  "optimizer_params": {
+    "optimizer": {
+      "lr": 0.0003,
+      "weight_decay": 1e-06
+    },
+    "scheduler": {
+      "milestones": [3001],
+      "gamma": 0.2
+    }
+  },
+  "trainer_params": {
+    "epochs": 2010,
+    "train_episodes": 100000,
+    "train_batch_size": 64,
+    "loss_type": "po_loss",
+    "alpha": 0.05,
+    "sparse_bt": {
+      "enable": true,
+      "best_anchor_count": 6,
+      "adjacent_top_count": 32,
+      "global_pair_num": 32
+    },
+    "rl_mix": {
+      "enable": true,
+      "weight": 0.2
+    },
+    "pair_schedule": [
+      {
+        "start_epoch": 1,
+        "end_epoch": 400,
+        "best_anchor_count": 6,
+        "adjacent_top_count": 32,
+        "global_pair_num": 32,
+        "rl_weight": 0.2
+      },
+      {
+        "start_epoch": 401,
+        "end_epoch": 1500,
+        "best_anchor_count": 6,
+        "adjacent_top_count": 24,
+        "global_pair_num": 16,
+        "rl_weight": 0.1
+      },
+      {
+        "start_epoch": 1501,
+        "end_epoch": 2010,
+        "best_anchor_count": 4,
+        "adjacent_top_count": 16,
+        "global_pair_num": 8,
+        "rl_weight": 0.05
+      }
+    ],
+    "local_search": false,
+    "augmentation_enable": false,
+    "aug_factor": 8,
+    "aug_batch_size": 8,
+    "optimizer_step_interval": 1,
+    "logging": {
+      "model_save_interval": 100,
+      "img_save_interval": 100,
+      "log_image_params_1": {
+        "json_foldername": "log_image_style",
+        "filename": "style_tsp_100_auto.json"
+      },
+      "log_image_params_2": {
+        "json_foldername": "log_image_style",
+        "filename": "style_loss_1.json"
+      }
+    },
+    "model_load": {
+      "enable": false
+    }
+  },
+  "search_params": {
+    "search_proportion": 0.2,
+    "proportion_type": "maximum",
+    "number_of_cpu": 32
+  },
+  "logger_params": {
+    "log_file": {
+      "desc": "train__tsp_n100__po",
+      "filename": "log.txt"
+    }
+  }
+}
